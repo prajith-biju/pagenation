@@ -1,6 +1,6 @@
 import { pagesType } from "../types";
 
-const PageNumber: React.FC<pagesType> = ({ num, isActive, current }) => {
+export const PageNumber: React.FC<pagesType> = ({ num, isActive, current }) => {
   return (
     <div
       className={`${isActive ? "p-[10px]" : "w-[0px]"} ${
