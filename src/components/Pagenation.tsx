@@ -34,6 +34,27 @@ export const Pagenation: React.FC<pagenationProps> = ({
     }
   };
 
+  const toFirstPage = () => {
+    if (currentNum > 1) {
+      setCurrentNum(1);
+    }
+  };
+  const toLastPage = () => {
+    if (pages && currentNum < pages.length) {
+      setCurrentNum(pages.length);
+    }
+  };
+  const toPreviusPage = () => {
+    if (currentNum > 1) {
+      setCurrentNum((prev) => prev - 1);
+    }
+  };
+  const toNextPage = () => {
+    if (pages && currentNum < pages.length) {
+      setCurrentNum((prev) => prev + 1);
+    }
+  };
+
   const createUniquePages = (activePages: pagesType[]) => {
     let leftDummy: pagesType[] = [];
     let rightDummy: pagesType[] = [];
@@ -161,10 +182,10 @@ export const Pagenation: React.FC<pagenationProps> = ({
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="left-btns p-[20px]">
-        <button className="p-[8px]">
+        <button className="p-[8px]" onClick={toFirstPage}>
           <i className="fas fa-angle-double-left"></i>
         </button>
-        <button className="p-[8px]">
+        <button className="p-[8px]" onClick={toPreviusPage}>
           <i className="fas fa-angle-left"></i>
         </button>
       </div>
@@ -186,10 +207,10 @@ export const Pagenation: React.FC<pagenationProps> = ({
       </div>
 
       <div className="right-btns p-[20px]">
-        <button className="p-[8px]">
+        <button className="p-[8px]" onClick={toNextPage}>
           <i className="fas fa-angle-right"></i>
         </button>
-        <button className="p-[8px]">
+        <button className="p-[8px]" onClick={toLastPage}>
           <i className="fas fa-angle-double-right"></i>
         </button>
       </div>
