@@ -35,14 +35,68 @@ export const Pagenation: React.FC<pagenationProps> = ({
   };
 
   const createUniquePages = (activePages: pagesType[]) => {
+    let leftDummy: pagesType[] = [];
+    let rightDummy: pagesType[] = [];
+    leftDummy.length = rightDummy.length = 3;
+    leftDummy.fill({ id: -1, num: -1, isActive: false, current: false });
+    rightDummy.fill({ id: -1, num: -1, isActive: false, current: false });
+
     if (pages) {
+      leftDummy = leftDummy.map((item: pagesType, idx) => ({
+        ...item,
+        id: idx * idx + -5,
+      }));
+      rightDummy = rightDummy.map((item: pagesType, idx) => ({
+        ...item,
+        id: (idx + 5) * pages.length,
+      }));
       const startPages = pages.slice(0, 2);
       const endPages = pages.slice(-2);
       setActivePages(activePages);
       setActivePages(startPages);
       setActivePages(endPages);
-      const set = new Set([...startPages, ...activePages, ...endPages]);
-      return [...set];
+
+      if (
+        activePages.every((elem: pagesType) => {
+          return elem.num >= 4;
+        }) &&
+        activePages.every((elem: pagesType) => {
+          return elem.num <= pages.length - 3;
+        })
+      ) {
+        const set = new Set([
+          ...startPages,
+          ...leftDummy,
+          ...activePages,
+          ...rightDummy,
+          ...endPages,
+        ]);
+        return [...set];
+      } else if (
+        activePages.every((elem: pagesType) => {
+          return elem.num >= 4;
+        })
+      ) {
+        const set = new Set([
+          ...startPages,
+          ...leftDummy,
+          ...activePages,
+          ...endPages,
+        ]);
+        return [...set];
+      } else if (
+        activePages.every((elem: pagesType) => {
+          return elem.num <= pages.length - 3;
+        })
+      ) {
+        const set = new Set([
+          ...startPages,
+          ...activePages,
+          ...rightDummy,
+          ...endPages,
+        ]);
+        return [...set];
+      }
     }
   };
 
