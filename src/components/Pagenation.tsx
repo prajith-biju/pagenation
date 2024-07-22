@@ -10,10 +10,18 @@ export const Pagenation: React.FC<pagenationProps> = ({
 }) => {
   const [pages, setPages] = useState<pagesType[]>();
   const [currentPages, setCurrentPages] = useState<pagesType[]>();
+  const [currentNum, setCurrentNum] = useState(currentPage);
+
+  const resetCurrent = () => {
+    pages?.map((item: pagesType) => {
+      item.current = false;
+    });
+  };
 
   const renderPagenation = () => {
-    const star = currentPage - 3;
-    const end = currentPage + count - 5;
+    resetCurrent();
+    const star = currentNum - 3;
+    const end = currentNum + count - 5;
     let tempCurrent: pagesType[] = [];
     if (pages) {
       tempCurrent = pages.slice(star, end);
@@ -42,7 +50,7 @@ export const Pagenation: React.FC<pagenationProps> = ({
 
   useEffect(() => {
     renderPagenation();
-  }, [pages]);
+  }, [currentNum]);
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
@@ -57,12 +65,17 @@ export const Pagenation: React.FC<pagenationProps> = ({
 
       <div className="p-[4px] flex">
         {currentPages?.map((item: pagesType) => (
-          <PageNumber
+          <span
             key={item.id}
-            num={item.num}
-            isActive={item.isActive}
-            current={item.current}
-          />
+            className="flex items-center"
+            onClick={() => setCurrentNum(item.num)}
+          >
+            <PageNumber
+              num={item.num}
+              isActive={item.isActive}
+              current={item.current}
+            />
+          </span>
         ))}
       </div>
 
