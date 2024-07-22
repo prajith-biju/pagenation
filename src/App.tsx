@@ -4,7 +4,7 @@ import { Pagenation } from "./components/Pagenation";
 function App() {
   return (
     <>
-      <Pagenation count={10} total={3000} currentPage={56} />
+      <Pagenation count={10} total={3000} currentPage={2} />
     </>
   );
 }

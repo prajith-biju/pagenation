@@ -28,22 +28,65 @@ export const Pagenation: React.FC<pagenationProps> = ({
     });
   };
 
-  const renderPagenation = () => {
-    resetCurrent();
-    let tempCurrent: pagesType[] = [];
-    const star = currentNum - 3;
-    const end = currentNum + 2;
+  const clickPage = (page: pagesType) => {
+    if (page.isActive) {
+      setCurrentNum(page.num);
+    }
+  };
+
+  const createUniquePages = (activePages: pagesType[]) => {
     if (pages) {
-      const activePages = pages.slice(star, end);
-      const statPages = pages.slice(0, 2);
+      const startPages = pages.slice(0, 2);
       const endPages = pages.slice(-2);
       setActivePages(activePages);
-      setActivePages(statPages);
+      setActivePages(startPages);
       setActivePages(endPages);
-      tempCurrent = [...statPages, ...activePages, ...endPages];
-      console.log(tempCurrent);
+      const set = new Set([...startPages, ...activePages, ...endPages]);
+      return [...set];
     }
-    setCurrentPages(tempCurrent);
+  };
+
+  const renderPagenation = () => {
+    resetCurrent();
+    let tempCurrent: pagesType[] | undefined = [];
+    let activePages: pagesType[] = [];
+    if (pages) {
+      const n = pages.length;
+
+      if (
+        currentNum !== 2 &&
+        currentNum !== 1 &&
+        currentNum !== n &&
+        currentNum !== n - 1
+      ) {
+        const star = currentNum - 3;
+        const end = currentNum + 2;
+        activePages = pages.slice(star, end);
+        tempCurrent = createUniquePages(activePages);
+        setCurrentPages(tempCurrent);
+        return;
+      } else if (currentNum === 1) {
+        activePages = pages.slice(0, 3);
+        tempCurrent = createUniquePages(activePages);
+        setCurrentPages(tempCurrent);
+        return;
+      } else if (currentNum === 2) {
+        activePages = pages.slice(0, 4);
+        tempCurrent = createUniquePages(activePages);
+        setCurrentPages(tempCurrent);
+        return;
+      } else if (currentNum === n) {
+        activePages = pages.slice(n - 3, n + 1);
+        tempCurrent = createUniquePages(activePages);
+        setCurrentPages(tempCurrent);
+        return;
+      } else if (currentNum === n - 1) {
+        activePages = pages.slice(n - 4, n + 1);
+        tempCurrent = createUniquePages(activePages);
+        setCurrentPages(tempCurrent);
+        return;
+      }
+    }
   };
 
   useEffect(() => {
@@ -77,7 +120,7 @@ export const Pagenation: React.FC<pagenationProps> = ({
           <span
             key={item.id}
             className="flex items-center"
-            onClick={() => setCurrentNum(item.num)}
+            onClick={() => clickPage(item)}
           >
             <PageNumber
               num={item.num}
